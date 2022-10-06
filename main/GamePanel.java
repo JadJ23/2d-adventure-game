@@ -1,5 +1,7 @@
 package main;
 
+import entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,7 +10,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int standardTileSize = 16; //16 by 16 pixels is standard
     final int scale = 3; // 16 pixels small so need to make bigger
 
-    final int tileSize = standardTileSize * scale; // 48x48 pixels is standard scaled size
+    public final int tileSize = standardTileSize * scale; // 48x48 pixels is standard scaled size
     final int maxScreenHeight = 16;
     final int maxScreenWidth = 12;
     //16 x 12 or 4 x3
@@ -20,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
-
+    Player player = new Player(this, keyH);
     //set player positon
     int playerX = 100;
     int playerY = 100;
@@ -70,26 +72,14 @@ public class GamePanel extends JPanel implements Runnable{
     public void update(){
         //upper left is (0,0) so x increases to the right and y increases down
         // update position due to key input
-        if (keyH.up == true){
-            playerY -= playerSpeed;
-        }
-        else if(keyH.down == true){
-            playerY+= playerSpeed;
-        }
-        else if (keyH.left == true){
-            playerX-= playerSpeed;
-        }
-        else if (keyH.right == true){
-            playerX+= playerSpeed;
-        }
+        player.update();
 
     }
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.white);
-        g2.fillRect(playerX, playerY, tileSize, tileSize); // use as character for now
+        player.draw(g2);
         g2.dispose(); // saves memory; good practice
     }
 }
